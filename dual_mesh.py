@@ -95,14 +95,14 @@ class dual_mesh(bpy.types.Operator):
             #for m in ob.modifiers:
             #    boolModifiers.append(m.show_viewport)
             #    m.show_viewport = False
-        
+
             bpy.ops.object.mode_set(mode = 'EDIT')
 
             if self.preserve_borders:
                 bpy.ops.mesh.select_mode(use_extend=False, use_expand=False, type='EDGE')
                 bpy.ops.mesh.select_non_manifold(extend=False, use_wire=False, use_boundary=True, use_multi_face=False, use_non_contiguous=False, use_verts=False)
                 bpy.ops.mesh.extrude_region_move(MESH_OT_extrude_region={"mirror":False}, TRANSFORM_OT_translate={"value":(0, 0, 0), "constraint_axis":(False, False, False), "constraint_orientation":'GLOBAL', "mirror":False, "proportional":'DISABLED', "proportional_edit_falloff":'SMOOTH', "proportional_size":1, "snap":False, "snap_target":'CLOSEST', "snap_point":(0, 0, 0), "snap_align":False, "snap_normal":(0, 0, 0), "gpencil_strokes":False, "texture_space":False, "remove_on_cancel":False, "release_confirm":False})
-        
+
             bpy.ops.mesh.select_mode(use_extend=False, use_expand=False, type='VERT', action='TOGGLE')
             bpy.ops.mesh.select_all(action = 'SELECT')
             bpy.ops.mesh.quads_convert_to_tris(quad_method=self.quad_method, ngon_method=self.polygon_method)
@@ -111,12 +111,12 @@ class dual_mesh(bpy.types.Operator):
             bpy.ops.object.modifier_add(type='SUBSURF')
             ob.modifiers[-1].name = "dual_mesh_subsurf"
             bpy.ops.object.modifier_apply(apply_as='DATA', modifier='dual_mesh_subsurf')
-             
+
             bpy.ops.object.mode_set(mode = 'EDIT')
             bpy.ops.mesh.select_all(action = 'DESELECT')
-             
+
             verts = ob.data.vertices
-             
+
             bpy.ops.object.mode_set(mode = 'OBJECT')
             verts[0].select = True
             bpy.ops.object.mode_set(mode = 'EDIT')
@@ -130,7 +130,7 @@ class dual_mesh(bpy.types.Operator):
 
             bpy.ops.mesh.select_non_manifold(extend=False, use_wire=False, use_boundary=True, use_multi_face=False, use_non_contiguous=False, use_verts=False)
             bpy.ops.mesh.select_more()
-        
+
             # find boundaries
             bpy.ops.object.mode_set(mode = 'OBJECT')
             bound_v = [v.index for v in ob.data.vertices if v.select]
@@ -141,7 +141,7 @@ class dual_mesh(bpy.types.Operator):
             # select quad faces
             bpy.context.tool_settings.mesh_select_mode = (False, False, True) # face mode
             bpy.ops.mesh.select_face_by_sides(number=4, extend=False)  
-   
+
             # deselect boundaries
             bpy.ops.object.mode_set(mode = 'OBJECT')
             for i in bound_v:
@@ -150,7 +150,7 @@ class dual_mesh(bpy.types.Operator):
                 bpy.context.active_object.data.edges[i].select = False
             for i in bound_p:
                 bpy.context.active_object.data.polygons[i].select = False
-        
+
             bpy.ops.object.mode_set(mode = 'EDIT')
 
             bpy.context.tool_settings.mesh_select_mode = (False, False, True) # face mode
@@ -191,7 +191,7 @@ class dual_mesh(bpy.types.Operator):
 
         for o in sel: o.select = True
         bpy.context.scene.objects.active = act    
-        
+
         return {'FINISHED'} 
       
 
